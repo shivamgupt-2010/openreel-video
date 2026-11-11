@@ -1,9 +1,10 @@
 [build]
-  publish = "dist"
-  command = "pnpm --filter @openreel/web build && node -e \"const fs=require('fs'); fs.rmSync('./dist', {recursive: true, force: true}); fs.cpSync('../web/dist', './dist', {recursive: true});\""
+  publish = "apps/web/dist"
+  command = "pnpm --filter @openreel/web build && node -e \"const fs=require('fs'); ['dist', 'apps/web/dist'].forEach(d => { fs.rmSync(d, {recursive: true, force: true}); fs.mkdirSync(d, {recursive: true}); fs.cpSync('../web/dist', d, {recursive: true}); });\""
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
+  PNPM_VERSION = "9.15.5"
 
 [[headers]]
   for = "/*"
