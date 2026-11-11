@@ -1,0 +1,17 @@
+[build]
+  publish = "dist"
+  command = "vite build"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Embedder-Policy = "require-corp"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

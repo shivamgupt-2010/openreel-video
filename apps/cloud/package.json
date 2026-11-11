@@ -3,6 +3,7 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
+		"build": "pnpm --filter @openreel/web build && node -e \"const fs=require('fs'); fs.rmSync('./dist', {recursive: true, force: true}); fs.cpSync('../web/dist', './dist', {recursive: true});\"",
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
 		"start": "wrangler dev",
