@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "pnpm --filter @openreel/web dev",
     "build:wasm": "pnpm --filter @openreel/core build:wasm",
-    "build": "pnpm build:wasm && pnpm --filter @openreel/web build",
+    "build": "pnpm --filter @openreel/web build",
+    "build:all": "(pnpm build:wasm || true) && pnpm --filter @openreel/web build",
+    "vercel-build": "pnpm --filter @openreel/web build",
     "preview": "pnpm --filter @openreel/web preview",
     "deploy": "pnpm build && pnpm --filter @openreel/web deploy",
     "deploy:preview": "pnpm build && pnpm --filter @openreel/web deploy:preview",

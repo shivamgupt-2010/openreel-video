@@ -20,6 +20,14 @@ interface ServiceConfig {
 }
 
 const SERVICE_CONFIG: Record<string, ServiceConfig> = {
+  shivai: {
+    baseUrl: "https://shiv-aiserver.onrender.com/v1",
+    allowedPaths: /^(chat\/completions|models)$/,
+    authHeaders: (key) => ({
+      "x-api-key": key || "shivai-production-key-2026",
+      ...(key?.includes(".") ? { Authorization: `Bearer ${key}` } : {}),
+    }),
+  },
   elevenlabs: {
     baseUrl: "https://api.elevenlabs.io/v1",
     allowedPaths: /^(voices|models|text-to-speech\/[\w-]+)$/,

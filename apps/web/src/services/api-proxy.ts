@@ -10,6 +10,13 @@
 const isDev = import.meta.env.DEV;
 
 const DIRECT_CONFIG = {
+  shivai: {
+    baseUrl: "https://shiv-aiserver.onrender.com/v1",
+    authHeaders: (key: string): Record<string, string> => ({
+      "x-api-key": key || "shivai-production-key-2026",
+      ...(key?.includes(".") ? { Authorization: `Bearer ${key}` } : {}),
+    }),
+  },
   elevenlabs: {
     baseUrl: "https://api.elevenlabs.io/v1",
     authHeaders: (key: string): Record<string, string> => ({
@@ -34,7 +41,8 @@ const DIRECT_CONFIG = {
 
 export type CompatibleApiService =
   | "openai-compatible"
-  | "anthropic-compatible";
+  | "anthropic-compatible"
+  | "shivai";
 export type ApiService = keyof typeof DIRECT_CONFIG | CompatibleApiService;
 
 export interface ApiFetchOptions extends globalThis.RequestInit {
@@ -110,16 +118,18 @@ export async function apiFetch(
 
   if (
     service === "openai-compatible" ||
-    service === "anthropic-compatible"
+    service === "anthropic-compatible" ||
+    service === "shivai"
   ) {
     const allowedPaths =
-      service === "openai-compatible"
-        ? ["/chat/completions", "/models"]
-        : ["/messages", "/models"];
+      service === "anthropic-compatible"
+        ? ["/messages", "/models"]
+        : ["/chat/completions", "/models"];
     if (!allowedPaths.includes(path)) {
       throw new Error(`Unsupported ${service} API path.`);
     }
-    const normalizedBaseUrl = normalizeCompatibleBaseUrl(baseUrl ?? "");
+    const resolvedBase = baseUrl || (service === "shivai" ? "https://shiv-aiserver.onrender.com/v1" : "");
+    const normalizedBaseUrl = normalizeCompatibleBaseUrl(resolvedBase);
     const safeHeaders = Object.fromEntries(
       Object.entries(extraHeaders).filter(
         ([name]) =>
@@ -132,7 +142,12 @@ export async function apiFetch(
       ),
     );
     const authHeaders: Record<string, string> = {};
-    if (service === "openai-compatible") {
+    if (service === "shivai") {
+      authHeaders["x-api-key"] = apiKey || "shivai-production-key-2026";
+      if (apiKey?.includes(".")) {
+        authHeaders.Authorization = `Bearer ${apiKey}`;
+      }
+    } else if (service === "openai-compatible") {
       if (apiKey) authHeaders.Authorization = `Bearer ${apiKey}`;
     } else {
       authHeaders["anthropic-version"] = "2023-06-01";

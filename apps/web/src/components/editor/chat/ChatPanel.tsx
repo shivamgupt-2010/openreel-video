@@ -30,7 +30,7 @@ function EmptyState({
   const send = useChatStore((s) => s.send);
   const connection = useAIConnectionStore();
   const openSettings = useSettingsStore((s) => s.openSettings);
-  const ready = !!connection.baseUrl.trim() && !!connection.model.trim() && (!!connection.apiKey || connection.provider === "compatible");
+  const ready = !!connection.baseUrl.trim() && !!connection.model.trim() && (!!connection.apiKey || connection.provider === "compatible" || connection.provider === "shivai");
 
   return (
     <div className="flex h-full flex-col items-center justify-center px-2 text-center">

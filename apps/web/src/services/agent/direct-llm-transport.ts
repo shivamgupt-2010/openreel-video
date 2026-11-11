@@ -18,7 +18,30 @@ export function makeDirectBYOKClient(options: DirectConnection): LLMClient {
     options.signal?.throwIfAborted();
     let res: Response;
     try {
-      res = await fetch(`${baseUrl}${provider === "anthropic" ? "/messages" : "/chat/completions"}`, { method: "POST", redirect: "error", credentials: "omit", headers: { "Content-Type": "application/json", ...(provider === "anthropic" ? { "x-api-key": options.apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" } : options.apiKey ? { Authorization: `Bearer ${options.apiKey}` } : {}) }, body: JSON.stringify(body), signal: options.signal });
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      if (options.apiKey) {
+        headers["x-api-key"] = options.apiKey;
+        if (provider === "anthropic") {
+          headers["anthropic-version"] = "2023-06-01";
+          headers["anthropic-dangerous-direct-browser-access"] = "true";
+        } else if (options.provider === "shivai") {
+          if (options.apiKey.startsWith("shiv_sk_") || options.apiKey.includes(".") || options.apiKey.startsWith("Bearer ")) {
+            headers["Authorization"] = options.apiKey.startsWith("Bearer ") ? options.apiKey : `Bearer ${options.apiKey}`;
+          }
+        } else {
+          headers["Authorization"] = options.apiKey.startsWith("Bearer ") ? options.apiKey : `Bearer ${options.apiKey}`;
+        }
+      }
+      res = await fetch(`${baseUrl}${provider === "anthropic" ? "/messages" : "/chat/completions"}`, {
+        method: "POST",
+        redirect: "error",
+        credentials: "omit",
+        headers,
+        body: JSON.stringify(body),
+        signal: options.signal,
+      });
     } catch (error) {
       if (options.signal?.aborted) throw error;
       throw new Error("The model endpoint could not be reached. Check its URL and browser CORS support. No proxy or security bypass is used.");

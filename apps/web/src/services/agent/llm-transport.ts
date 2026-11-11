@@ -9,6 +9,7 @@ import { apiFetch } from "../api-proxy";
 import type { LlmProvider } from "../../stores/settings-store";
 
 const PATHS: Record<LlmProvider, string> = {
+  shivai: "/chat/completions",
   "openai-compatible": "/chat/completions",
   "anthropic-compatible": "/messages",
 };

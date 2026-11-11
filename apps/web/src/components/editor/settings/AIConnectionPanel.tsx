@@ -7,8 +7,11 @@ export function AIConnectionPanel({ disabled = false }: { disabled?: boolean }) 
     <div className="space-y-4 text-xs">
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block text-fg-2">Provider
-          <select aria-label="AI provider" className={inputClass} disabled={disabled} value={connection.provider} onChange={(e) => { const provider = e.target.value as AIProvider; connection.configure({ provider, ...AI_PROVIDER_DEFAULTS[provider], apiKey: "" }); }}>
-            <option value="openai">OpenAI</option><option value="anthropic">Anthropic</option><option value="compatible">OpenAI compatible / local</option>
+          <select aria-label="AI provider" className={inputClass} disabled={disabled} value={connection.provider} onChange={(e) => { const provider = e.target.value as AIProvider; connection.configure({ provider, ...AI_PROVIDER_DEFAULTS[provider], apiKey: provider === "shivai" ? (import.meta.env?.VITE_SHIV_CLOUD_API_KEY || "shivai-production-key-2026") : "" }); }}>
+            <option value="shivai">SHIV AI Sovereign Server (Cloud)</option>
+            <option value="openai">OpenAI</option>
+            <option value="anthropic">Anthropic</option>
+            <option value="compatible">OpenAI compatible / local</option>
           </select>
         </label>
         <label className="block text-fg-2">Model ID<input aria-label="AI model ID" className={inputClass} disabled={disabled} value={connection.model} onChange={(e) => connection.configure({ model: e.target.value })} spellCheck={false} /></label>

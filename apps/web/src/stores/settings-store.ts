@@ -16,6 +16,13 @@ export interface ServiceConfig {
  */
 export const SERVICE_REGISTRY: readonly ServiceConfig[] = [
   {
+    id: "shivai",
+    label: "SHIV AI Sovereign Server",
+    description: "Sovereign AI backend (shiv-aiserver.onrender.com)",
+    docsUrl: "https://shiv-aiserver.onrender.com",
+    keyOptional: true,
+  },
+  {
     id: "elevenlabs",
     label: "ElevenLabs",
     description: "AI voice generation and text-to-speech",
@@ -48,12 +55,12 @@ export const SERVICE_REGISTRY: readonly ServiceConfig[] = [
 ] as const;
 
 export type TtsProvider = "elevenlabs";
-export type LlmProvider = "openai-compatible" | "anthropic-compatible";
+export type LlmProvider = "shivai" | "openai-compatible" | "anthropic-compatible";
 export type AggregatorProvider = "kie-ai" | "freepik";
 export type SettingsTab = "general" | "ai-editor" | "api-keys" | "mcp";
 
 function isLlmProvider(value: unknown): value is LlmProvider {
-  return value === "openai-compatible" || value === "anthropic-compatible";
+  return value === "shivai" || value === "openai-compatible" || value === "anthropic-compatible";
 }
 
 export interface SettingsState {
