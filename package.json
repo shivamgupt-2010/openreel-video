@@ -64,5 +64,11 @@
   ],
   "devDependencies": {
     "@astryxdesign/cli": "^0.1.1"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@ffmpeg/core-mt@0.12.6": "patches/@ffmpeg__core-mt@0.12.6.patch",
+      "@ffmpeg/core@0.12.6": "patches/@ffmpeg__core@0.12.6.patch"
+    }
   }
 }
