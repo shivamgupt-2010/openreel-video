@@ -1,7 +1,5 @@
 import { create } from "zustand";
 
-import { create } from "zustand";
-
 export type AIProvider = "shivai" | "openai" | "anthropic" | "compatible";
 export const AI_PROVIDER_DEFAULTS: Record<AIProvider, { baseUrl: string; model: string }> = {
   shivai: {

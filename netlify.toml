@@ -1,6 +1,6 @@
 [build]
   publish = "apps/web/dist"
-  command = "pnpm --filter @openreel/web build"
+  command = "pnpm --filter @openreel/web build && node -e \"const fs=require('fs'), path=require('path'); const src = path.resolve(process.cwd(), process.cwd().endsWith('apps/cloud') ? '../web/dist' : 'apps/web/dist'); ['dist', 'apps/web/dist', path.resolve(process.cwd(), 'apps/web/dist')].forEach(dest => { try { fs.mkdirSync(dest, {recursive: true}); fs.cpSync(src, dest, {recursive: true}); } catch(e){} });\""
 
 [build.environment]
   NODE_VERSION = "22"

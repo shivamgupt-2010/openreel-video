@@ -10,6 +10,9 @@ export interface LlmModelOption {
  * stays empty so the app never invents a provider or model selection.
  */
 export const LLM_MODELS: Record<LlmProvider, LlmModelOption[]> = {
+  shivai: [
+    { id: "shiv-ai-v2", label: "SHIV AI v2 (Cloud)" },
+  ],
   "openai-compatible": [],
   "anthropic-compatible": [],
 };
