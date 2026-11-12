@@ -146,8 +146,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       return;
     }
     if (!useProjectStore.getState().hasOpenProject) {
-      set({ error: "Open or create a project before chatting." });
-      return;
+      useProjectStore.getState().createNewProject("My AI Video", 1920, 1080);
     }
 
     const projectState = useProjectStore.getState();
