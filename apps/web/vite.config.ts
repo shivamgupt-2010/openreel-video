@@ -1,8 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import fs from "fs";
 import { stripFfmpegPlugin } from "./vite-plugins/strip-ffmpeg";
 import { pruneFontsPlugin } from "./vite-plugins/prune-fonts";
+
+const resolveReact = (pkg: string) => {
+  const local = path.resolve(__dirname, "./node_modules", pkg);
+  if (fs.existsSync(local)) return local;
+  return path.resolve(__dirname, "../../node_modules", pkg);
+};
 
 const isDesktop = process.env.OPENREEL_DESKTOP === "1";
 
@@ -35,8 +42,8 @@ export default defineConfig({
   resolve: {
     dedupe: ["react", "react-dom"],
     alias: {
-      react: path.resolve(__dirname, "./node_modules/react"),
-      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
+      react: resolveReact("react"),
+      "react-dom": resolveReact("react-dom"),
       "@": path.resolve(__dirname, "./src"),
       "@openreel/core": path.resolve(__dirname, "../../packages/core/src"),
       "@openreel/agent": path.resolve(__dirname, "../../packages/agent/src"),
