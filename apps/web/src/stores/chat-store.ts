@@ -317,7 +317,14 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set((state) => ({
       messages: state.messages.map((message) => {
         if (message.id !== assistantId) return message;
-        const finalText = wasAborted ? "Cancelled. Pending edits were discarded." : !result.committed ? "The turn failed. No edits were applied." : result.text || message.text;
+        const fallbackText = message.toolCalls.length > 0
+          ? "🎬 Edits have been applied to the timeline."
+          : "✨ Request processed by SHIV AI Sovereign Engine.";
+        const finalText = wasAborted
+          ? "Cancelled. Pending edits were discarded."
+          : !result.committed
+            ? "The turn failed. No edits were applied."
+            : result.text || message.text || fallbackText;
         const emptyNotice =
           !finalText && result.stoppedReason === "end_turn"
             ? message.toolCalls.length > 0
