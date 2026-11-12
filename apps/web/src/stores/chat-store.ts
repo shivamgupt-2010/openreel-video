@@ -157,11 +157,11 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }
 
     const { provider, model, baseUrl: inputBaseUrl, apiKey } = useAIConnectionStore.getState();
-    if (!["openai", "anthropic", "compatible"].includes(provider)) { set({ error: "Choose an API format in Settings → AI Editor." }); return; }
+    if (!["shivai", "openai", "anthropic", "compatible"].includes(provider)) { set({ error: "Choose an API format in Settings → AI Editor." }); return; }
     if (!model.trim()) { set({ error: "Enter a model ID in Settings → AI Editor." }); return; }
     let baseUrl: string;
     try { baseUrl = validateAIEndpoint(inputBaseUrl); } catch { set({ error: "Enter a valid HTTPS endpoint, or HTTP on localhost." }); return; }
-    if (provider !== "compatible" && !apiKey) {
+    if (provider !== "compatible" && provider !== "shivai" && !apiKey) {
       set({
         error: "Add your session API key in Settings → AI Editor before sending an edit request.",
       });
